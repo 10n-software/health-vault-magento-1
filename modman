@@ -1,1 +1,2 @@
-app app
+code    app/code/community/TenN/JobHealth
+TenN_JobHealth.xml  app/etc/modules/TenN_JobHealth.xml
