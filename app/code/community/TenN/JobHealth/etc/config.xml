@@ -1,0 +1,34 @@
+<config>
+    <global>
+        <models>
+            <tenn_jobhealth>
+                <class>TenN_JobHealth_Model</class>
+            </tenn_jobhealth>
+            <cron>
+                <rewrite>
+                    <observer>TenN_JobHealth_Model_Cron</observer>
+                </rewrite>
+            </cron>
+        </models>
+        <helpers>
+            <tenn_jobhealth>
+                <class>TenN_JobHealth_Helper</class>
+            </tenn_jobhealth>
+        </helpers>
+        <blocks>
+            <tenn_jobhealth>
+                <class>TenN_JobHealth_Block</class>
+            </tenn_jobhealth>
+        </blocks>
+    </global>
+    <default>
+        <system>
+            <job_health>
+            <enabled>1</enabled>
+            <logging_enabled>1</logging_enabled>
+            <always>* * * * *</always>
+            <log_file>jobhealth.log</log_file>
+            </job_health>
+        </system>
+    </default>
+</config>
