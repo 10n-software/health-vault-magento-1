@@ -27,7 +27,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
         }
         try {
             $result = parent::_processJob($schedule, $jobConfig, $isAlways);
-            $url = $this->getReportUrl($schedule, $jobConfig, (microtime(true) - $startTime),'healthy', $isAlways);
+            $url = $this->getReportUrl($schedule, $jobConfig, (microtime(true) - $startTime),null, $isAlways);
             $this->send($url, $jobCode, $schedule->getMessages());
         } catch (\Exception $e) {
             $url = $this->getReportUrl($schedule, $jobConfig, (microtime(true) - $startTime), 'failed', $isAlways);
@@ -86,10 +86,12 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
                     $status = 'failed';
                 }
                 $params = [
-                    'status' => $status,
                     'elapsed' => intval($elapsed * 1000),
                     'tz' => $this->getTimezone()
                 ];
+                if ($status) {
+                    $params['status'] = $status;
+                }
                 if ($isAlways) {
                     $expression = $this->getHelper()->getAlwaysExpression();
                     if ($expression) {
