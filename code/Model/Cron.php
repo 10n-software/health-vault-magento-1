@@ -20,21 +20,28 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
         if (!$this->getHelper()->isEnabled()) {
             return parent::_processJob($schedule, $jobConfig, $isAlways);
         }
-        $startTime = microtime(true);
+
         $jobCode = 'unknown';
         if ($schedule instanceof Mage_Cron_Model_Schedule) {
             $jobCode = $schedule->getJobCode();
         }
         try {
+            $startTime = microtime(true);
             $result = parent::_processJob($schedule, $jobConfig, $isAlways);
-            $url = $this->getReportUrl($schedule, $jobConfig, (microtime(true) - $startTime),null, $isAlways);
-            $this->send($url, $jobCode, $schedule->getMessages());
+            $elapsed = (microtime(true) - $startTime);
+            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways);
         } catch (\Exception $e) {
-            $url = $this->getReportUrl($schedule, $jobConfig, (microtime(true) - $startTime), 'failed', $isAlways);
-            $this->send($url, $jobCode, $schedule->getMessages());
+            $elapsed = (microtime(true) - $startTime);
+            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways, 'failed', $schedule->getMessages());
             throw $e;
         }
         return $result;
+    }
+
+    public function sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways = false, $status = null, $message = null)
+    {
+        $url = $this->getReportUrl($schedule, $jobConfig, $elapsed, $status, $isAlways);
+        $this->send($url, $jobCode, $message);
     }
 
     /**
