@@ -38,10 +38,24 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
         return $result;
     }
 
+    /**
+     * Sends the execution event to the vault API server.
+     *
+     * @param $schedule
+     * @param $jobConfig
+     * @param $jobCode
+     * @param $elapsed
+     * @param bool $isAlways
+     * @param null $status
+     * @param null $message
+     */
+
     public function sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways = false, $status = null, $message = null)
     {
-        $url = $this->getReportUrl($schedule, $jobConfig, $elapsed, $status, $isAlways);
-        $this->send($url, $jobCode, $message);
+        if ($this->getHelper()->isEnabled()) {
+            $url = $this->getReportUrl($schedule, $jobConfig, $elapsed, $status, $isAlways);
+            $this->send($url, $jobCode, $message);
+        }
     }
 
     /**
