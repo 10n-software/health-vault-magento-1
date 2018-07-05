@@ -29,10 +29,10 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
             $startTime = microtime(true);
             $result = parent::_processJob($schedule, $jobConfig, $isAlways);
             $elapsed = (microtime(true) - $startTime);
-            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways);
+            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, intval($elapsed * 1000), $isAlways);
         } catch (\Exception $e) {
             $elapsed = (microtime(true) - $startTime);
-            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways, 'failed', $schedule->getMessages());
+            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, intval($elapsed * 1000), $isAlways, 'failed', $schedule->getMessages());
             throw $e;
         }
         return $result;
@@ -44,7 +44,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
      * @param $schedule
      * @param $jobConfig
      * @param $jobCode
-     * @param $elapsed
+     * @param int $elapsed time in millinseconds
      * @param bool $isAlways
      * @param null $status
      * @param null $message
@@ -107,7 +107,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
                     $status = 'failed';
                 }
                 $params = [
-                    'elapsed' => intval($elapsed * 1000),
+                    'elapsed' => $elapsed,
                     'tz' => $this->getTimezone()
                 ];
                 if ($status) {
