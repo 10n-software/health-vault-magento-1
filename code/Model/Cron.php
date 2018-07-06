@@ -67,6 +67,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
     public function send($url, $jobCode, $content = null)
     {
         if ($url) {
+            $startTime = microtime(true);
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             if ($content) {
@@ -76,12 +77,17 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
             $result = curl_exec($curl);
             $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             if ($code == 200) {
-                $this->getHelper()->log($result);
+                $this->getHelper()->log($result . ' via ' . $url . $this->getElapsedMessage($startTime));
             } else {
                 $this->getHelper()->log("Job updated failed for {$jobCode}:\nCode: {$code}\n{$result}", Zend_Log::ALERT);
             }
             curl_close($curl);
         }
+    }
+
+    protected function getElapsedMessage($startTime)
+    {
+        return sprintf(' in %.03f seconds', (microtime(true) - $startTime));
     }
 
     /**
