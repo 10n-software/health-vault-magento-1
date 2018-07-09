@@ -114,7 +114,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
                 }
                 $params = [
                     TenN_JobHealth_Helper_Data::PARAM_ELAPSED => $elapsed,
-                    TenN_JobHealth_Helper_Data::PARAM_TIMEZONE => $this->getTimezone()
+                    TenN_JobHealth_Helper_Data::PARAM_TIMEZONE => $this->getHelper()->getTimezone()
                 ];
                 if ($status) {
                     $params[TenN_JobHealth_Helper_Data::PARAM_STATUS] = $status;
