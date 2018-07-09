@@ -23,6 +23,7 @@ composer require 10n/health-vault-magento1
         
 ## Configuration
 Configuration is managed via the System Configuration in the administration UI.
+
 ![admin configuration](https://vh.10n-software.com/static/img/configuration.ae26ee5.png)
 
 ### Enabled
@@ -63,7 +64,7 @@ class MyModule_Model_Cron extends Mage_Cron_Model_Observer
         $result = parent::_processJob($schedule, $jobConfig, $isAlways);
         $elapsed = microtime(true) - $startTime;
         $jobCode = $schedule->getJobCode();
-        Mage::getModel('tenn_jobhealth')->sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways);
+        Mage::getModel('tenn_jobhealth/cron')->sendExecutionEvent($schedule, $jobConfig, $jobCode, $elapsed, $isAlways);
 
         return $result;
     }
