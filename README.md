@@ -23,6 +23,7 @@ composer require 10n/health-vault-magento1
         
 ## Configuration
 Configuration is managed via the System Configuration in the administration UI.
+
 ![admin configuration](https://vh.10n-software.com/static/img/configuration.ae26ee5.png)
 
 ### Enabled
