@@ -58,6 +58,21 @@ class TenN_JobHealth_Helper_Data extends Mage_Core_Helper_Abstract
      */
     const CONFIG_ALWAYS = 'system/job_health/always';
 
+    /**
+     * The healthy status
+     */
+    const STATUS_HEALTHY = 'healthy';
+
+    /**
+     * The degraded status
+     */
+    const STATUS_DEGRADED = 'degraded';
+
+    /**
+     * The failed status
+     */
+    const STATUS_FAILED = 'failed';
+
     protected $acceptableParams = [
         self::PARAM_CRON,
         self::PARAM_STATUS,

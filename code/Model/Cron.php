@@ -32,7 +32,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
             $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, intval($elapsed * 1000), $isAlways, null, $schedule->getMessages());
         } catch (\Exception $e) {
             $elapsed = (microtime(true) - $startTime);
-            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, intval($elapsed * 1000), $isAlways, 'failed', $schedule->getMessages());
+            $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, intval($elapsed * 1000), $isAlways, TenN_JobHealth_Helper_Data::STATUS_FAILED, $schedule->getMessages());
             throw $e;
         }
         return $result;
@@ -110,7 +110,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
             $token = $this->getHelper()->getToken();
             if ($token) {
                 if ($schedule->getStatus() != Mage_Cron_Model_Schedule::STATUS_SUCCESS) {
-                    $status = 'failed';
+                    $status = TenN_JobHealth_Helper_Data::STATUS_FAILED;
                 }
                 $params = [
                     TenN_JobHealth_Helper_Data::PARAM_ELAPSED => $elapsed,
@@ -125,10 +125,10 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
                         $params[TenN_JobHealth_Helper_Data::PARAM_CRON] = (string)$expression;
                     }
                 } else {
-                    $nextRun  = $this->getNextRun($schedule);
+                    $nextRun = $this->getNextRun($schedule);
                     if ($nextRun) {
                         $params[TenN_JobHealth_Helper_Data::PARAM_NEXT_RUN] = (int)$nextRun->format('U');
-                    } else if (!empty($jobConfig->schedule->cron_expr)){
+                    } else if (!empty($jobConfig->schedule->cron_expr)) {
                         $params[TenN_JobHealth_Helper_Data::PARAM_CRON] = (string)$jobConfig->schedule->cron_expr;
                     }
                 }
