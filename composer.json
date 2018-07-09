@@ -1,5 +1,5 @@
 {
-  "name": "10n/health-vault-magento-1",
+  "name": "10n/health-vault-magento1",
   "type": "library",
   "description": "Magento 1 adapter that validates the health of cron jobs and offline tasks for the 10n Job Health Vault (https://vh.10n-software.com/)",
   "license": "Apache-2.0",
