@@ -2,6 +2,32 @@
 
 class TenN_JobHealth_Helper_Data extends Mage_Core_Helper_Abstract
 {
+
+    /**
+     * Constant got providing the cron exporession when building a URL
+     */
+    const PARAM_CRON = 'cron';
+
+    /**
+     * Constant denoting the job status when building a URL
+     */
+    const PARAM_STATUS = 'status';
+
+    /**
+     * Constant denoting the elapsed time when building a URL
+     */
+    const PARAM_ELAPSED = 'elapsed';
+
+    /**
+     * Constant denoting the time zone when building a URL
+     */
+    const PARAM_TIMEZONE = 'tz';
+
+    /**
+     * Constant denoting the next run time when building a URL
+     */
+    const PARAM_NEXT_RUN = 'next_run';
+
     /**
      * Constant for getting the proper name for the base helper
      */
@@ -32,6 +58,14 @@ class TenN_JobHealth_Helper_Data extends Mage_Core_Helper_Abstract
      */
     const CONFIG_ALWAYS = 'system/job_health/always';
 
+    protected $acceptableParams = [
+        self::PARAM_CRON,
+        self::PARAM_STATUS,
+        self::PARAM_NEXT_RUN,
+        self::PARAM_ELAPSED,
+        self::PARAM_TIMEZONE
+    ];
+
     /**
      * Is the functionality enabled?
      *
@@ -39,6 +73,22 @@ class TenN_JobHealth_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isEnabled() {
         return Mage::getStoreConfigFlag(self::CONFIG_ENABLED);
+    }
+
+
+    /**
+     * Retrieves the system timezone for the site.
+     *
+     * @return string
+     */
+
+    public function getTimezone()
+    {
+        $tz =@date_default_timezone_get();
+        if (!$tz) {
+            $tz = Mage_Core_Model_Locale::DEFAULT_TIMEZONE;
+        }
+        return $tz;
     }
 
     /**
@@ -61,6 +111,30 @@ class TenN_JobHealth_Helper_Data extends Mage_Core_Helper_Abstract
     public function getAlwaysExpression()
     {
         return Mage::getStoreConfig(self::CONFIG_ALWAYS);
+    }
+
+    /**
+     * Builds a formatted URL to send to the vault
+     *
+     * @param string $jobCode
+     * @param array $params
+     * @return string The URL
+     * @throws TenN_JobHealth_Helper_InvalidParameterException
+     */
+
+    public function buildUrl($jobCode, array $params)
+    {
+        foreach ($params as $key => $value) {
+            if (!in_array($key, $this->acceptableParams)) {
+                throw new TenN_JobHealth_Helper_InvalidParameterException($key . ' is not an allowed parameter');
+            }
+        }
+
+        $url = 'https://vh.10n-software.com/i/'
+            . $this->getToken() . '/'
+            . $jobCode . '?'
+            . http_build_query($params);
+        return $url;
     }
 
     /**

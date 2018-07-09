@@ -132,31 +132,17 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
                         $params['cron'] = (string)$jobConfig->schedule->cron_expr;
                     }
                 }
-
-                $url = 'https://vh.10n-software.com/i/'
-                    . $token . '/'
-                    . $schedule->getJobCode() . '?'
-                    . http_build_query($params);
-                return $url;
+                try {
+                    $url = $this->getHelper()->buildUrl($schedule->getJobCode(), $params);
+                    return $url;
+                } catch (TenN_JobHealth_Helper_InvalidParameterException $e) {
+                    $this->getHelper()->log($e, Zend_Log::ERR);
+                }
             }
         }
         return null;
     }
 
-    /**
-     * Retrieves the system timezone for the site.
-     *
-     * @return string
-     */
-
-    public function getTimezone()
-    {
-        $tz =@date_default_timezone_get();
-        if (!$tz) {
-            $tz = Mage_Core_Model_Locale::DEFAULT_TIMEZONE;
-        }
-        return $tz;
-    }
 
     /**
      * Gets the next run for the scheduled item, if it exists
