@@ -3,7 +3,7 @@
 ## Introduction
 The Magento 1 integration will automatically create all new jobs as they are executed as they are found in the cron_schedule table. It also will automatically send elapsed time for each job so you can track how each job is performing.
 
-Visit [https://vh.10n-software.com](10n Job Health Vault)
+Visit [10n Job Health Vault](https://vh.10n-software.com)
 
 ## Installation
 The source can be found on the Github library page. You can either copy the source code from there, use modman , or  composer.
