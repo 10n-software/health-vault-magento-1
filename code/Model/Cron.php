@@ -113,23 +113,23 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
                     $status = 'failed';
                 }
                 $params = [
-                    'elapsed' => $elapsed,
-                    'tz' => $this->getTimezone()
+                    TenN_JobHealth_Helper_Data::PARAM_ELAPSED => $elapsed,
+                    TenN_JobHealth_Helper_Data::PARAM_TIMEZONE => $this->getTimezone()
                 ];
                 if ($status) {
-                    $params['status'] = $status;
+                    $params[TenN_JobHealth_Helper_Data::PARAM_STATUS] = $status;
                 }
                 if ($isAlways) {
                     $expression = $this->getHelper()->getAlwaysExpression();
                     if ($expression) {
-                        $params['cron'] = (string)$expression;
+                        $params[TenN_JobHealth_Helper_Data::PARAM_CRON] = (string)$expression;
                     }
                 } else {
                     $nextRun  = $this->getNextRun($schedule);
                     if ($nextRun) {
-                        $params['next_run'] = (int)$nextRun->format('U');
+                        $params[TenN_JobHealth_Helper_Data::PARAM_NEXT_RUN] = (int)$nextRun->format('U');
                     } else if (!empty($jobConfig->schedule->cron_expr)){
-                        $params['cron'] = (string)$jobConfig->schedule->cron_expr;
+                        $params[TenN_JobHealth_Helper_Data::PARAM_CRON] = (string)$jobConfig->schedule->cron_expr;
                     }
                 }
                 try {
