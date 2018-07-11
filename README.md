@@ -18,7 +18,7 @@ modman clone https://github.com/10n-software/health-vault-magento-1.git
 ### Composer Installation
 ```
 cd <magento directory>
-composer require 10n/health-vault-magento1
+composer require 10n/health-vault-magento-1
 ```
         
 ## Configuration
