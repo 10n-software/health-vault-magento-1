@@ -130,6 +130,10 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
                         $params[TenN_JobHealth_Helper_Data::PARAM_NEXT_RUN] = (int)$nextRun->format('U');
                     } else if (!empty($jobConfig->schedule->cron_expr)) {
                         $params[TenN_JobHealth_Helper_Data::PARAM_CRON] = (string)$jobConfig->schedule->cron_expr;
+                    } else if (!empty($jobConfig->schedule->config_path)) {
+                        $params[TenN_JobHealth_Helper_Data::PARAM_CRON] = Mage::getStoreConfig((string)$jobConfig->schedule->config_path);
+                    } else {
+                        $this->getHelper()->log('Unable to determine cron expression for ' . $schedule->getJobCode());
                     }
                 }
                 try {
