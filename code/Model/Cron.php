@@ -33,6 +33,7 @@ class TenN_JobHealth_Model_Cron extends Mage_Cron_Model_Observer
         } catch (\Exception $e) {
             $elapsed = (microtime(true) - $startTime);
             $this->sendExecutionEvent($schedule, $jobConfig, $jobCode, intval($elapsed * 1000), $isAlways, TenN_JobHealth_Helper_Data::STATUS_FAILED, $schedule->getMessages());
+            Mage::logException($e);
             throw $e;
         }
         return $result;
